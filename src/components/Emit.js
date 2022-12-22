@@ -1,11 +1,16 @@
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components";
+import Web3Context from "../contexts/Web3Context";
 import Header from "./Header";
-import listTickets from "../tickets/listTickets.json";
-const fs = require("fs");
+import axios from "axios";
+import { EmitTicketABI, EmitTicketAddress } from "../constants";
+import { useNavigate } from "react-router-dom";
 
 export default function Emit(){
+
+    const {web3Provider, address} = useContext(Web3Context);
+    const [isConnected, setIsConnected] = useState(true);
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -17,6 +22,9 @@ export default function Emit(){
     const [eventTimeEnd, setEventTimeEnd] = useState(new Date());
 
     const [image, setImage] = useState("");
+    if (address == ""){
+        setIsConnected(false);
+    }
 
     async function saveData(event){
         event.preventDefault();
@@ -24,7 +32,6 @@ export default function Emit(){
             title,
             description,
             price,
-            quantity,
             organization,
             eventDate,
             eventTimeBegin,
@@ -32,32 +39,46 @@ export default function Emit(){
             image
         }
 
-        //create file with NFT data;
-        const numTickets = listTickets.length;
-        const newName = "../tickets/" + String(numTickets + 1) + ".json"
-        try{
-            fs.writeFile(newName, JSON.stringify(NFTdata), (err) => {
-                if (err) {
-                    console.log(err);
-                }
-            });
-            setTitle("");
-            setDescription("");
-            setPrice(0);
-            setQuantity(0);
-            setOrganization("");
-            setEventDate(new Date());
-            setEventTimeBegin(new Date());
-            setEventTimeEnd(new Date());
-            setImage("");
+        const urlPublish = "https://extendsclass.com/api/json-storage/bin";
 
-        } catch (err) {
-            alert("Não foi possível salvar os dados do ingresso!");
-            console.log(err);
-            return;
+        const headers = {
+            "Secure-Key": process.env.REACT_APP_EXTENDKEY,
         }
 
-        
+        const NFTQuantity = quantity;
+
+        const NFTQuantityArray = Array.from({length: NFTQuantity}, (_, i) => 0);
+
+        await Promise.all(
+            NFTQuantityArray.map(async () => {
+                await publishNFT(NFTdata, headers, urlPublish, address);
+            })
+        );
+
+    }
+
+    async function publishNFT(NFTdata, headers, urlPublish, contractAddress){
+        axios.post(urlPublish, NFTdata, {headers: headers})
+        .then(async response => {
+            const urlId = response.data.id;
+            try{
+                await mintNFT(urlId, contractAddress);
+                alert("Ingresso emitido com sucesso!");
+            } catch (error){
+                alert("Erro ao emitir ingresso!");
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    async function mintNFT(urlId, contractAddress){
+        const contractInstance = new web3Provider.eth.Contract(EmitTicketABI, EmitTicketAddress);
+        await contractInstance.methods.safeMint(contractAddress, urlId).send({
+            from: contractAddress
+        });
+
     }
     
     return(

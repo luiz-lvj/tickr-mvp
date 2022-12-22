@@ -10,6 +10,7 @@ export default function Header(){
         <h1 onClick={() => history("/")}
         >Tick<span>r</span></h1>
         <HeaderButtons>
+            <h2 onClick={() => history("/my-tickets")} >Meus ingressos</h2>
             <h2  onClick={() => history("/emit")} >Emitir Ingressos</h2>
             <ConnectButton/>
         </HeaderButtons>
