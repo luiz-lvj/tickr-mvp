@@ -52,6 +52,7 @@ const ConnectButtonStyle = styled.button`
     border-radius: 9px;
     padding: 15px 20px;
     cursor: pointer;
+    margin-left: 20px;
     &:hover{
         background: #FF00FF;
         opacity: 0.8;

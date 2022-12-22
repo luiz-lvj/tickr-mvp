@@ -10,7 +10,7 @@ export default function Header(){
         <h1 onClick={() => history("/")}
         >Tick<span>r</span></h1>
         <HeaderButtons>
-
+            <h2  onClick={() => history("/emit")} >Emitir Ingressos</h2>
             <ConnectButton/>
         </HeaderButtons>
         </HeaderStyle>
@@ -20,9 +20,19 @@ export default function Header(){
 const HeaderButtons = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: right;
+    justify-content: space-between;
     align-items: center;
-    width: 60%;
+    width: 40%;
+
+    h2{
+        color: #FFFFFF;
+        font-weight: bold;
+        font-size: 20px;
+        cursor: pointer;
+        &:hover{
+            opacity: 0.8;
+        }
+    }
 `;
 
 const HeaderStyle = styled.div`

@@ -36,7 +36,6 @@ const GlobalStyle = createGlobalStyle `
     body {
         line-height: 1;
         font-family: 'Nunito', sans-serif;
-        background: #000000;
         margin-left: 0;
         margin-right: 0;
     }
