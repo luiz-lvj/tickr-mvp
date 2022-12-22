@@ -64,13 +64,67 @@ export default function MyTickets(){
     return(
         <MyTicketStyle>
             <Header/>
+                <QuantityStyle>Quantidade de ingressos: {tickets.length}</QuantityStyle>
+            <TicketStyle>
+                
+                {tickets.map((ticket, idx) => {
+                    return(
+                        <TicketCardStyle key={idx}>
+                            <img src={ticket.image} alt="ticket"/>
+                            <h1>Evento: {ticket.title}</h1>
+                            <p>Descrição: {ticket.description}</p>
+                            <p> Preço: {ticket.price}</p>
+                            <p>Organizadora: {ticket.organization}</p>
+                            <p>Data: {ticket.eventDate}</p>
+                            <p>Início: {ticket.eventTimeBegin}</p>
+                            <p>Fim: {ticket.eventTimeEnd}</p>
+                            
+                        </TicketCardStyle>
+                    );
+                })}
+            </TicketStyle>
         </MyTicketStyle>
     );
 }
+
+const QuantityStyle = styled.h1`
+    display: block;
+    position: fixed;
+    top: 110px;
+    margin-left: 10px;
+`;
 
 const MyTicketStyle = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 1000px;
+`;
+
+const TicketStyle = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10%;
+    padding-right: 10%;
+    flex-wrap: wrap;
+    margin-top: 250px;
+
+`;
+
+const TicketCardStyle = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    h1{
+        font-size: 20px;
+        font-weight: bold;
+    }
+    img{
+        width: 300px;
+        height: 400px;
+        margin-bottom: 10px;
+    }
 `;
