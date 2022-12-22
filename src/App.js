@@ -5,16 +5,13 @@ import GlobalStyle from "./components/GlobalStyle";
 import Home from "./components/Home";
 
 function App() {
-  const [signer, setSigner] = useState(null);
-  const[provider, setProvider] = useState(null);
+  const [web3Provider, setWeb3Provider] = useState(null);
   const [address, setAddress] = useState("");
 
   const context = {
-    signer,
-    provider,
+    web3Provider,
     address,
-    setSigner,
-    setProvider,
+    setWeb3Provider,
     setAddress
   }
   return (
