@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from "react";
+import Web3Context from "./contexts/Web3Context";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import GlobalStyle from "./components/GlobalStyle";
+import Home from "./components/Home";
 
 function App() {
+  const [signer, setSigner] = useState(null);
+  const[provider, setProvider] = useState(null);
+  const [address, setAddress] = useState("");
+
+  const context = {
+    signer,
+    provider,
+    address,
+    setSigner,
+    setProvider,
+    setAddress
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Web3Context.Provider value={context}>
+      <BrowserRouter>
+        <GlobalStyle />
+        <Routes>
+          <Route exact path="/" element={<Home/>}/>
+        </Routes>
+      </BrowserRouter>
+    </Web3Context.Provider>
   );
 }
 
